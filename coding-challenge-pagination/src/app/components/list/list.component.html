@@ -1,0 +1,43 @@
+
+<div class="container">
+
+    <form [formGroup]='searchForm'>
+        <div class="input__container">
+            <input [(ngModel)]="input" [formControl]="searchForm.get('input')" class="input" type="number" placeholder="Enter valid number here"/>
+            <button class="btn" (click)="onFetch()">Search</button>
+        </div>
+        <p *ngIf="
+            searchForm.get('input').touched &&
+            searchForm.get('input').hasError('required')
+        " class="error_label">Input number should not be empty</p>
+        <p *ngIf="input && input.toString().length !== 7 && input.toString().length !== 10" class="error_label">Input number length should be 7 or 10 only</p>
+    </form>
+
+    <h1 *ngIf="loading; else noDataTemplate" align='center'>Loading...</h1>
+    <ng-template #noDataTemplate>
+        <h1 *ngIf="chunk && chunk.length === 0" align='center'>No Data</h1>
+    </ng-template>
+    
+    <div class="list__container">
+        <ul class="list">
+            <li *ngFor="let item of chunk;" class="list__item">
+                <h2>{{ item }}</h2>
+            </li>
+        </ul>
+    </div>
+    
+    <div *ngIf="chunk" class="pagination__container">
+        <label>No of item per page &nbsp; </label>
+        <span class="page__label"> {{(page - 1) * perPage + 1}} - {{((page - 1) * perPage) + chunk.length}} of {{ totalItem }}</span>
+        <a class="ic_btn" (click)="previous()"> 
+            <img src="assets/icons/left-arrow.svg" alt="Previous">
+        </a>
+        <a class="ic_btn" (click)="next()">
+            <img src="assets/icons/right-arrow.svg" alt="Next">
+        </a>
+        <p>
+            Page - {{page}}
+        </p>
+    </div>
+    
+</div>
